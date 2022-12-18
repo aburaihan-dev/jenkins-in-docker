@@ -2,6 +2,7 @@ version: '3.8'
 services:
   jenkins-blueocean:
     build: .docker
+    pull_policy: always
     restart: always
     privileged: true
     user: root
@@ -12,3 +13,4 @@ services:
     volumes:
       - ./workspace:/var/jenkins_home
       - '/usr/bin/docker:/usr/bin/docker'
+      - '/var/run/docker.sock:/var/run/docker.sock'
