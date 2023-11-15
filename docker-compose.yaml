@@ -3,9 +3,9 @@ services:
   jenkins:
     build: 
       context: .
-      dockerfile: .docker/Dockerfile
-    image: jenkins-blueocean
-    container_name: jenkins-blueocean
+      dockerfile: .docker/Jenkins/Dockerfile
+    image: jenkins-jdk-17
+    container_name: jenkins-jdk-17
     privileged: true
     user: root
     restart: always
@@ -18,7 +18,10 @@ services:
       - /usr/bin/docker:/usr/bin/docker
 
   jenkins-agent:
-    image: jenkins/ssh-agent:latest-jdk17
+    build: 
+      context: .
+      dockerfile: .docker/Agent/Dockerfile
+    image: jenkins-ssh-agent-jdk-17
     container_name: agent
     hostname: jenkins-agent
     ports:
