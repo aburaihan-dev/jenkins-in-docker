@@ -3,7 +3,7 @@
 # jenkins-in-docker
 
 Blog Posts: 
-- Part-1: [Step-by-Step Guide to Setting Up Jenkins on Docker with Docker Agent-Based Builds](https://dev.to/msrabon/configure-docker-with-jenkins-in-docker-o02-temp-slug-7024055)
+- Part-1: [Step-by-Step Guide to Setting Up Jenkins on Docker with Docker Agent-Based Builds](https://dev.to/msrabon/step-by-step-guide-to-setting-up-jenkins-on-docker-with-docker-agent-based-builds-43j5)
 
 # Jenkins Docker Setup
 
