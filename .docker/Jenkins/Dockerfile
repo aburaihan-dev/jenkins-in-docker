@@ -3,17 +3,11 @@ FROM jenkins/jenkins:latest-jdk17
 
 USER root
 
-RUN apt-get update && apt-get install -y lsb-release
+RUN apt-get update && apt-get install -y curl git
 
-RUN curl -fsSLo /usr/share/keyrings/docker-archive-keyring.asc \
-  https://download.docker.com/linux/debian/gpg
+RUN curl -fsSL https://get.docker.com -o get-docker.sh && sh get-docker.sh
 
-RUN echo "deb [arch=$(dpkg --print-architecture) \
-  signed-by=/usr/share/keyrings/docker-archive-keyring.asc] \
-  https://download.docker.com/linux/debian \
-  $(lsb_release -cs) stable" > /etc/apt/sources.list.d/docker.list
-
-RUN apt-get update && apt-get install -y docker-ce-cli
+RUN usermod -aG docker jenkins
 
 RUN apt update && apt install tzdata -y
 
