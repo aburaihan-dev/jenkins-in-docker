@@ -9,11 +9,13 @@ services:
     privileged: true
     user: root
     restart: always
+    environment:
+      - JENKINS_HOME=/root/jenkins_home
     ports:
       - 8080:8080
       - 50000:50000
     volumes:
-      - jenkins_home:/var/jenkins_home
+      - jenkins_home:/root/jenkins_home
       - /var/run/docker.sock:/var/run/docker.sock
       - /usr/bin/docker:/usr/bin/docker
 
@@ -40,4 +42,4 @@ volumes:
     name: jenkins_home
   jenkins-ssh-agent:
     name: jenkins-ssh-agent
-
+    
