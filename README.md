@@ -36,6 +36,11 @@ Follow these steps to get Jenkins up and running using Docker:
    ```
 6. Access Jenkins in your browser by navigating to http://localhost:8080. Follow the on-screen instructions to complete the setup.
 
+## Generate SSH-key for connecting with Jenkins Agent via SSH
+```bash
+export AGENT_SSH_DIR="jenkins-agent-ssh-key" && mkdir -p ${AGENT_SSH_DIR} && ssh-keygen -t rsa -b 4096 -f ./${AGENT_SSH_DIR}/id_rsa
+```
+
 ## Customization
 You can customize the Jenkins configuration by modifying the docker-compose.yml file or the Dockerfile based on your specific requirements.
 
