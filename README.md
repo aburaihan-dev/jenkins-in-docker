@@ -94,6 +94,17 @@ Get the current host key from the running agent container:
 docker exec jenkins-ssh-agent cat /etc/ssh/ssh_host_rsa_key.pub
 ```
 
+## Troubleshooting
+
+- If a Jenkins pipeline fails on the SSH agent with `permission denied while trying to connect to the docker API at unix:///var/run/docker.sock`, rebuild and restart the agent image so the runtime socket-group mapping hook is applied:
+
+```bash
+./start-jenkins.sh build jenkins-agent
+./start-jenkins.sh start jenkins-agent
+```
+
+- If you also see Office 365 webhook `400` errors, those are notification failures and separate from Docker socket access problems.
+
 ## Security Notes
 
 - The Jenkins controller runs as `root` and has access to the host Docker socket so that jobs can run Docker builds. Treat this setup as a trusted local or lab environment, not a hardened production deployment.

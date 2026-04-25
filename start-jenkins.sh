@@ -68,12 +68,12 @@ case "$target" in
   jenkins-agent)
     compose_services=(jenkins-agent)
     image_names=(jenkins-ssh-agent-jdk-21)
-    container_names=(agent)
+    container_names=(jenkins-ssh-agent)
     ;;
   both)
     compose_services=(jenkins jenkins-agent)
     image_names=(jenkins-jdk-21 jenkins-ssh-agent-jdk-21)
-    container_names=(jenkins-jdk-21 agent)
+    container_names=(jenkins-jdk-21 jenkins-ssh-agent)
     ;;
   *)
     echo "Unknown deploy target: $target" >&2
