@@ -1,6 +1,6 @@
-[![HitCount](https://hits.dwyl.com/aburaihan-dev/jenkins-in-docker.svg?style=flat-square)](http://hits.dwyl.com/aburaihan-dev/jenkins-in-docker)
-
 # jenkins-in-docker
+
+![Repo Hits](https://profile-views-counter.mdaburaihansrabon.workers.dev/badge/repo/aburaihan-dev/jenkins-in-docker?style=flat-square&color=blue)
 
 Blog Posts: 
 - Part-1: [Step-by-Step Guide to Setting Up Jenkins on Docker with Docker Agent-Based Builds](https://dev.to/msrabon/step-by-step-guide-to-setting-up-jenkins-on-docker-with-docker-agent-based-builds-43j5)
@@ -17,6 +17,7 @@ Follow these steps to get Jenkins up and running using Docker:
 
 - Ensure that Docker is installed on your machine. If not, you can download and install Docker from [Docker's official website](https://www.docker.com/get-started).
 - Ensure that Docker Compose v2 is available as `docker compose`.
+- Ensure your user can access the Docker daemon (for example by being in the `docker` group on Linux).
 
 ### Usage
 
@@ -65,8 +66,11 @@ Follow these steps to get Jenkins up and running using Docker:
    ./start-jenkins.sh start jenkins-agent
    # Restart only the SSH agent after changing its image or env config
 
-      ./start-jenkins.sh stop jenkins
-      # Stop only the Jenkins controller container
+   ./start-jenkins.sh stop jenkins
+   # Stop only the Jenkins controller container
+
+   ./start-jenkins.sh stop jenkins-agent
+   # Stop only the SSH agent container
    ```
 
 4. Build and start the stack:
@@ -77,6 +81,18 @@ Follow these steps to get Jenkins up and running using Docker:
 5. Access Jenkins in your browser by navigating to http://localhost:8080 and complete the initial setup.
 
 6. In Jenkins, configure an SSH agent that connects to `jenkins-agent` on port `22` using the private key at `./${AGENT_SSH_DIR}/id_rsa`.
+
+## Agent SSH Host Key Notes
+
+- The SSH agent container persists its host keys in a named Docker volume mounted to `/etc/ssh`.
+- Do not mount `./jenkins-agent-ssh-key` into `/etc/ssh`. That folder is for controller-side connection keys (`id_rsa` and `id_rsa.pub`) and does not include `sshd_config`.
+- If Jenkins is configured with "Manually provided key", update the node host key when the agent host keys change.
+
+Get the current host key from the running agent container:
+
+```bash
+docker exec jenkins-ssh-agent cat /etc/ssh/ssh_host_rsa_key.pub
+```
 
 ## Security Notes
 
