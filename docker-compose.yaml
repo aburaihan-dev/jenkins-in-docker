@@ -4,9 +4,8 @@ services:
     build: 
       context: .
       dockerfile: .docker/Jenkins/Dockerfile
-    image: jenkins-jdk-17
-    container_name: jenkins-jdk-17
-    privileged: true
+    image: jenkins-jdk-21
+    container_name: jenkins-jdk-21
     user: root
     restart: always
     environment:
@@ -17,23 +16,28 @@ services:
     volumes:
       - jenkins_home:/root/jenkins_home
       - /var/run/docker.sock:/var/run/docker.sock
-      - /usr/bin/docker:/usr/bin/docker
+      - ./jenkins-agent-ssh-key:/var/jenkins-agent-ssh-key:ro
+    networks:
+      - jenkins-network
 
   jenkins-agent:
     build: 
       context: .
       dockerfile: .docker/Agent/Dockerfile
-    image: jenkins-ssh-agent-jdk-17
-    container_name: agent
+    image: jenkins-ssh-agent-jdk-21
+    container_name: jenkins-ssh-agent
     hostname: jenkins-agent
+    user: root
     ports:
       - "2200:22"
     volumes:
       - jenkins-ssh-agent:/home/jenkins/agent
+      - jenkins-agent-ssh-host-keys:/etc/ssh
       - /var/run/docker.sock:/var/run/docker.sock
-      - /usr/bin/docker:/usr/bin/docker
     environment:
-      - JENKINS_AGENT_SSH_PUBKEY=${JENKINS_AGENT_SSH_PUBKEY}
+      JENKINS_AGENT_SSH_PUBKEY: "${JENKINS_AGENT_SSH_PUBKEY:?missing_jenkins_agent_ssh_pubkey}"
+    networks:
+      - jenkins-network
 
 
 
@@ -42,4 +46,10 @@ volumes:
     name: jenkins_home
   jenkins-ssh-agent:
     name: jenkins-ssh-agent
+  jenkins-agent-ssh-host-keys:
+    name: jenkins-agent-ssh-host-keys
+
+networks:
+  jenkins-network:
+    name: jenkins-network
     
